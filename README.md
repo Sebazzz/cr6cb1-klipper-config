@@ -35,3 +35,44 @@ Use the following `PRINT_END`:
 ```
 PRINT_END
 ```
+
+## Firmware compilation
+
+To compile the Klipper firmware, run the following command:
+
+```bash
+cd ~/klipper
+make clean
+make menuconfig
+```
+
+Select these options:
+
+```
+* [*] Enable extra low-level configuration options 
+* Micro-controller Architecture (STMicroelectronics STM32)  ---> 
+* Processor model (STM32G0B1)  ---> 
+* Bootloader offset (8KiB bootloader)  ---> 
+* Clock Reference (8 MHz crystal)  ---> 
+* Communication interface (USB (on PA11/PA12))
+GPIO pins to set at micro-controller startup (PD2)
+```
+
+The last line ensures that the hot-end fan keeps on when the firmware is reset, until the Klipper host takes over control.
+
+Flash the firmware to the Mantra M4P using the following command:
+
+```bash
+make flash FLASH_DEVICE=/dev/serial/by-id/usb-Klipper_stm32g0b1xx_430030001050415833323520-if00
+```
+
+A DFU error will be shown, but can be ignored because the firmware is still updated.
+
+*Ignore this error*
+
+```
+dfu-util: Error during download get_status
+
+Failed to flash to /dev/serial/by-id/usb-Klipper_stm32g0b1xx_430030001050415833323520-if00: Error running dfu-util
+```
+
